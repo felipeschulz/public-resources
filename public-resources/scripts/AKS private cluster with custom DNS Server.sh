@@ -30,7 +30,7 @@ az network private-dns link vnet create \
 az identity create \
 --name $ManagedIdentityName \
 --resource-group $ClusterRGName
-
+echo "Waiting Managed Identity creation" && sleep 15s
 ManagedIdentityID=$(az identity show --name $ManagedIdentityName --resource-group $ClusterRGName --query 'clientId' -o tsv)
 
 #Assign roles on Managed Identity
@@ -40,7 +40,6 @@ az role assignment create --role "Network Contributor" --assignee $ManagedIdenti
 echo "Waiting AAD Role propagation" && sleep 15s && echo "Starting Cluster Deploy"
 
 AssignIdentityID=$(az identity show --name $ManagedIdentityName --resource-group $ClusterRGName --query 'id' -o tsv)
-
 
 #Create Private Cluster
 az aks create \
